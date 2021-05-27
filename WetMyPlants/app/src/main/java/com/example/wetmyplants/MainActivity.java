@@ -13,6 +13,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     Button signinButton;
+    TextView loggedInUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +21,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         signinButton = (Button)findViewById(R.id.button4);
+        loggedInUser = (TextView)findViewById(R.id.textView6);
+        loggedInUser.setText("Please sign in!");
+        //loggedInUser.setVisibility(View.INVISIBLE);
 
         signinButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
@@ -27,5 +31,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        if(getIntent().getBooleanExtra("loggedOn", false)){
+            loggedInUser.setText("Welcome "+getIntent().getStringExtra("savedName"));
+            //loggedInUser.setVisibility(View.VISIBLE);
+        }
     }
 }
