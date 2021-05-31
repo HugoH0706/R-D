@@ -13,12 +13,21 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     Button signinButton;
+    Button buttonToRequest;
     TextView loggedInUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        buttonToRequest = (Button)findViewById(R.id.button7);
+        buttonToRequest.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                Intent intent = new Intent(MainActivity.this, RequestAPI.class);
+                startActivity(intent);
+            }
+        });
 
         signinButton = (Button)findViewById(R.id.button4);
         loggedInUser = (TextView)findViewById(R.id.textView6);
