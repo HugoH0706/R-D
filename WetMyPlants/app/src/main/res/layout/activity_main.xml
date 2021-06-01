@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@android:color/holo_green_light"
     android:layout_height="match_parent"
     tools:context=".LogIn">
 
@@ -63,7 +64,7 @@
         android:layout_marginTop="52dp"
         android:gravity="center"
         android:text="CraftYourGarden"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -75,7 +76,7 @@
         android:layout_height="43dp"
         android:gravity="center"
         android:text="TextView"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.935"

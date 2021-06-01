@@ -2,7 +2,6 @@ package com.example.wetmyplants;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -26,7 +25,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -71,7 +69,6 @@ public class RequestAPI extends AppCompatActivity {
                     Toast.makeText(RequestAPI.this, "Available fruits: \n"+showList(list), Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(RequestAPI.this, "Input not found... (to see the possible options enter: all)", Toast.LENGTH_LONG).show();
-                    //searchItem.setText("Input not found... (to see the possible options enter: all)");
                 }
             }
         });
@@ -96,7 +93,7 @@ public class RequestAPI extends AppCompatActivity {
     }
 
     private void jsonParse(String crop){
-        String url = "https://www.fruityvice.com/api/fruit/"+crop;  //https://jsonplaceholder.typicode.com/todos/1
+        String url = "https://www.fruityvice.com/api/fruit/"+crop;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override

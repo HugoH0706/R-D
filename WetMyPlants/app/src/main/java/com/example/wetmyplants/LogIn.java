@@ -6,8 +6,7 @@ package com.example.wetmyplants;
         import android.content.Intent;
         import android.content.SharedPreferences;
         import android.os.Bundle;
-
-        import com.example.wetmyplants.databinding.ActivityMainBinding;
+        
         import android.widget.Button;
         import android.widget.EditText;
         import android.widget.TextView;
@@ -32,14 +31,14 @@ public class LogIn extends AppCompatActivity {
         setContentView(R.layout.activity_log_in);
 
         loggedIn = false;
-        loginButton = (Button)findViewById(R.id.button2);                        //Login button
+        loginButton = (Button)findViewById(R.id.button2);
         registerButton = (Button)findViewById(R.id.button3);
         homeButton = (Button)findViewById(R.id.button);
 
         emailLogin = findViewById(R.id.editTextTextEmailAddress);
         passwordLogin = findViewById(R.id.editTextTextPassword);
-        emailRegister = findViewById(R.id.editTextTextEmailAddress2);    //email testbalk
-        passwordRegister = findViewById(R.id.editTextTextPassword2);        //password balk
+        emailRegister = findViewById(R.id.editTextTextEmailAddress2);
+        passwordRegister = findViewById(R.id.editTextTextPassword2);
         nameRegister = findViewById(R.id.editTextTextEmailAddress4);
 
         sp = getSharedPreferences("MyUserPrefs", Context.MODE_PRIVATE);
@@ -57,7 +56,6 @@ public class LogIn extends AppCompatActivity {
                 editor.putString("nameRegister", nameStr);
                 editor.commit();
                 Toast.makeText(LogIn.this, "Account details saved!", Toast.LENGTH_LONG).show();
-                //Toast.makeText(getApplicationContext(), emailStr+nameStr+passwordStr+"Ye", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -73,12 +71,9 @@ public class LogIn extends AppCompatActivity {
                     loggedIn = true;
                     Intent resultData = new Intent(LogIn.this, MainActivity.class);
                     resultData.putExtra("savedName", nameSaved);
-                //    resultData.putExtra("savedPassword", passwordSaved);
-                //    resultData.putExtra("savedEmail", emailSaved);
                     resultData.putExtra("loggedOn", loggedIn);
                     Toast.makeText(LogIn.this, "You have logged in successfully!", Toast.LENGTH_SHORT).show();
                     startActivity(resultData);
-                //    finish();
                 } else{
                     Toast.makeText(LogIn.this, "Wrong email/password...", Toast.LENGTH_SHORT).show(); //getApplicationContext()
                 }
