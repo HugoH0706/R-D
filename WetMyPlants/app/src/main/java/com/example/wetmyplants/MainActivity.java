@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button signinButton;
+    Button signInButton;
     Button buttonToRequest;
     TextView loggedInUser;
 
@@ -22,6 +22,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         buttonToRequest = (Button)findViewById(R.id.button7);
+        signInButton = (Button)findViewById(R.id.button5);
+        loggedInUser = (TextView)findViewById(R.id.textView6);
+        loggedInUser.setText("Please sign in!");
+
+        signInButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                Intent intent = new Intent(MainActivity.this, LogIn.class);
+                startActivity(intent);
+            }
+        });
+
         buttonToRequest.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 Intent intent = new Intent(MainActivity.this, RequestAPI.class);
@@ -29,21 +40,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        signinButton = (Button)findViewById(R.id.button4);
-        loggedInUser = (TextView)findViewById(R.id.textView6);
-        loggedInUser.setText("Please sign in!");
-        //loggedInUser.setVisibility(View.INVISIBLE);
-
-        signinButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                Intent intent = new Intent(MainActivity.this, LogIn.class);
-                startActivity(intent);
-            }
-        });
-
         if(getIntent().getBooleanExtra("loggedOn", false)){
             loggedInUser.setText("Welcome "+getIntent().getStringExtra("savedName"));
-            //loggedInUser.setVisibility(View.VISIBLE);
         }
     }
 }

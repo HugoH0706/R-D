@@ -76,11 +76,11 @@ public class LogIn extends AppCompatActivity {
                 //    resultData.putExtra("savedPassword", passwordSaved);
                 //    resultData.putExtra("savedEmail", emailSaved);
                     resultData.putExtra("loggedOn", loggedIn);
-                    Toast.makeText(getApplicationContext(), "You have logged in successfully!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LogIn.this, "You have logged in successfully!", Toast.LENGTH_SHORT).show();
                     startActivity(resultData);
                 //    finish();
                 } else{
-                    Toast.makeText(getApplicationContext(), "Wrong email/password...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LogIn.this, "Wrong email/password...", Toast.LENGTH_SHORT).show(); //getApplicationContext()
                 }
             }
         });
