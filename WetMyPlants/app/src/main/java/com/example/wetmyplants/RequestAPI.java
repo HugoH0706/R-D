@@ -1,5 +1,8 @@
 package com.example.wetmyplants;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -27,13 +30,16 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.Deflater;
 
 public class RequestAPI extends AppCompatActivity {
     private RequestQueue queue;
-    private Button getButton, homeButton;
+    private SharedPreferences sp2;
+    private Button getButton, homeButton, addButton, deleteButton, myGarden;
     private TextView getName, getFamily, getGenus, getNutritions, getCarbohydrates, getProtein, getFat, getCalories, getSugar;
     private EditText searchItem;
     private ArrayList<String> list;
+    int itemsAdded = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +59,16 @@ public class RequestAPI extends AppCompatActivity {
         queue = Volley.newRequestQueue(this);
         getButton = (Button)findViewById(R.id.button9);
         homeButton = (Button) findViewById(R.id.button10);
+        addButton = (Button) findViewById(R.id.button11);
+        deleteButton = (Button) findViewById(R.id.button13);
         searchItem = (EditText) findViewById(R.id.editText1);
+        myGarden = (Button) findViewById(R.id.button14);
 
         List<String> fruits = Arrays.asList("Apple", "Apricot", "Banana", "Blueberry", "Cherry", "Guava", "Lemon", "Mango", "Orange", "Pear", "Pineapple", "Raspberry", "Strawberry", "Tomato", "Watermelon");
         list = new ArrayList<>();
         list.addAll(fruits);
+        sp2 = getSharedPreferences("MyFruits", Context.MODE_PRIVATE);
+        setItemsAdded();
 
         getButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -80,6 +91,56 @@ public class RequestAPI extends AppCompatActivity {
             }
         });
 
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String enteredFruit = searchItem.getText().toString();
+                if(list.contains(enteredFruit) ){
+                    SharedPreferences.Editor editor2 = sp2.edit();
+                    editor2.putString("fruit"+String.valueOf(itemsAdded), enteredFruit);
+                    editor2.commit();
+                    itemsAdded++;
+                    editor2.putInt("itemsAdded", itemsAdded);
+                    editor2.commit();
+                    Toast.makeText(RequestAPI.this, enteredFruit+" has been added to your personal page!", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(RequestAPI.this, enteredFruit+" not available or already added!", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        myGarden.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RequestAPI.this, MyGarden.class);
+                startActivity(intent);
+            }
+        });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String enteredFruit = searchItem.getText().toString();
+                if(itemsAdded > 0 && list.contains(enteredFruit)){
+                    SharedPreferences.Editor editor3 = sp2.edit();
+                    editor3.remove("fruit"+String.valueOf(itemsAdded));
+                    editor3.commit();
+                    itemsAdded--;
+                    editor3.putInt("itemsAdded", itemsAdded);
+                    editor3.commit();
+                    Toast.makeText(RequestAPI.this, "Item has been deleted!", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(RequestAPI.this, "This item hasn't been saved!", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    private void setItemsAdded(){
+        SharedPreferences sp5 = getApplicationContext().getSharedPreferences("MyFruits", Context.MODE_PRIVATE);
+        if(sp5.getInt("itemsAdded", 0) > 0){
+            itemsAdded = sp5.getInt("itemsAdded", 0);
+        }
     }
 
     private StringBuilder showList(ArrayList<String> fruitList){
@@ -130,81 +191,5 @@ public class RequestAPI extends AppCompatActivity {
             }
         });
         queue.add(request);
-    }
-
-
-    private StringRequest searchNameStringRequest(String nameSearch) {
-        final String URL_PREFIX = "http://openfarm.cc/api/v1";
-
-        String url = URL_PREFIX + nameSearch;
-
-        // 1st param => type of method (GET/PUT/POST/PATCH/etc)
-        // 2nd param => complete url of the API
-        // 3rd param => Response.Listener -> Success procedure
-        // 4th param => Response.ErrorListener -> Error procedure
-        return new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    // 3rd param - method onResponse lays the code procedure of success return
-                    // SUCCESS
-                    @Override
-                    public void onResponse(String response) {
-                        // try/catch block for returned JSON data
-                        // see API's documentation for returned format
-                        try {
-                            /*
-                            JSONObject result = new JSONObject(response).getJSONObject("data");
-                            JSONObject token = result.getJSONObject("token");
-                            String expiration = (String) token.getString("expiration");
-                            String secret = (String) token.getString("secret");
-                            Toast.makeText(RequestAPI.this, expiration + "\n" + secret, Toast.LENGTH_LONG).show();
-                            */
-                            JSONObject result = new JSONObject(response).getJSONObject("data");
-                            Toast.makeText(RequestAPI.this, result.toString(), Toast.LENGTH_LONG).show();
-
-                            /*
-                            int maxItems = result.getInt("end");
-                            JSONArray resultList = result.getJSONArray("item");
-                             */
-                            // catch for the JSON parsing error
-                        } catch (JSONException e) {
-                            Toast.makeText(RequestAPI.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    } // public void onResponse(String response)
-                }, // Response.Listener<String>()
-                new Response.ErrorListener() {
-                    // 4th param - method onErrorResponse lays the code procedure of error return
-                    // ERROR
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // display a simple message on the screen
-                        Toast.makeText(RequestAPI.this, "Plant source is not responding (OpenFarm API)", Toast.LENGTH_LONG).show();
-                    }
-                })
-        {
-            /*
-            protected Map<String, String> getHeaders() {
-                HashMap<String, String> hashMap = new HashMap<String, String>();
-                hashMap.put("email", "thijs.vandegriendt99@gmail.com");
-                hashMap.put("password", "ObamaBidon");
-
-
-                        Map<String, Object> MyData = new HashMap<String, Object>();
-                        MyData.put("data", hashMap); //Add the data you'd like to send to the server.
-                        return MyData;
-
-                return hashMap;
-            }
-
-            */
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Toast.makeText(RequestAPI.this, "TESTTTT", Toast.LENGTH_LONG).show();
-                Map<String, String>  params = new HashMap<String, String>();
-                params.put("Authorization: Token token", "thijs.vandegriendt99@gmail.com:67ed627cb2d5e93fecbe4e7a4b5355d3");
-                return params;
-            }
-           // Toast.makeText(RequestAPI.this, "TESSST", Toast.LENGTH_LONG).show();
-        };
     }
 }
